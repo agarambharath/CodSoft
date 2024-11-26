@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Recommendation System</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        #recommendation-form, #recommendations {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            width: 90%;
+            max-width: 600px;
+            margin: 10px 0;
+        }
+        label, select, button {
+            display: block;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        select, button {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            padding: 15px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #f8f9fa;
+        }
+        .book-title {
+            font-weight: bold;
+            color: #007bff;
+        }
+        .book-desc {
+            font-size: 14px;
+            color: #555;
+        }
+        .reset-btn {
+            background-color: #dc3545;
+            margin-top: 10px;
+        }
+        .reset-btn:hover {
+            background-color: #c82333;
+        }
+        @media (max-width: 600px) {
+            h1, h2 {
+                font-size: 20px;
+            }
+            select, button {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Book Recommendation System</h1>
+    <div id="recommendation-form">
+        <h2>Choose Your Preferences</h2>
+        <label for="genre">Select Genre:</label>
+        <select id="genre">
+            <option value="Fantasy">Fantasy</option>
+            <option value="Mystery">Mystery</option>
+            <option value="Science Fiction">Science Fiction</option>
+            <option value="Romance">Romance</option>
+            <option value="Non-Fiction">Non-Fiction</option>
+        </select>
+        <label for="rating">Minimum Rating:</label>
+        <select id="rating">
+            <option value="3">3+ Stars</option>
+            <option value="4">4+ Stars</option>
+            <option value="5">5 Stars</option>
+        </select>
+        <button id="recommend">Get Recommendations</button>
+    </div>
+    <div id="recommendations" style="display: none;">
+        <h2>Recommended Books:</h2>
+        <ul id="recommendation-list"></ul>
+        <button id="reset" class="reset-btn">Reset</button>
+    </div>
+    <script>
+        const books = [
+            { title: "Harry Potter", genre: "Fantasy", rating: 5, description: "A magical adventure of a young wizard." },
+            { title: "The Hobbit", genre: "Fantasy", rating: 4, description: "The prelude to The Lord of the Rings." },
+            { title: "Gone Girl", genre: "Mystery", rating: 5, description: "A psychological thriller with unexpected twists." },
+            { title: "The Da Vinci Code", genre: "Mystery", rating: 4, description: "A mysterious quest to uncover historical secrets." },
+            { title: "Dune", genre: "Science Fiction", rating: 5, description: "A saga set in a futuristic desert world." },
+            { title: "The Martian", genre: "Science Fiction", rating: 4, description: "A stranded astronaut's story of survival on Mars." },
+            { title: "Pride and Prejudice", genre: "Romance", rating: 5, description: "A classic love story by Jane Austen." },
+            { title: "Me Before You", genre: "Romance", rating: 4, description: "An emotional and heartwarming tale of love and sacrifice." },
+            { title: "Sapiens", genre: "Non-Fiction", rating: 5, description: "A thought-provoking look at human history." },
+            { title: "Atomic Habits", genre: "Non-Fiction", rating: 4, description: "Practical strategies for building better habits." }
+        ];
+
+        document.getElementById('recommend').addEventListener('click', function() {
+            const genre = document.getElementById('genre').value;
+            const rating = parseInt(document.getElementById('rating').value);
+            const recommendations = books.filter(book => book.genre === genre && book.rating >= rating);
+            displayRecommendations(recommendations);
+        });
+
+        function displayRecommendations(recommendations) {
+            const recommendationList = document.getElementById('recommendation-list');
+            const recommendationsDiv = document.getElementById('recommendations');
+            recommendationList.innerHTML = '';
+            if (recommendations.length === 0) {
+                const li = document.createElement('li');
+                li.textContent = "No books found matching your preferences.";
+                recommendationList.appendChild(li);
+            } else {
+                recommendations.forEach(book => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<span class="book-title">${book.title}</span>
+                                    <p class="book-desc">${book.description}</p>
+                                    <strong>Rating:</strong> ${book.rating} Stars`;
+                    recommendationList.appendChild(li);
+                });
+            }
+            recommendationsDiv.style.display = 'block';
+        }
+
+        document.getElementById('reset').addEventListener('click', function() {
+            document.getElementById('recommendations').style.display = 'none';
+            document.getElementById('recommendation-form').reset();
+            document.getElementById('recommendation-list').innerHTML = '';
+        });
+    </script>
+</body>
+</html>
+
